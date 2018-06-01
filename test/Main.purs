@@ -3,14 +3,14 @@ module Test.Main where
 
 import Prelude
 
-import Control.Monad.Aff (launchAff)
-import Control.Monad.Eff (Eff)
+import Effect (Effect)
+import Effect.Aff (launchAff)
 import Data.Maybe (fromMaybe)
-import Node.Process (PROCESS, lookupEnv)
-import NodeMailer (NODEMAILER, TransportConfig, Message, createTransporter, sendMail)
+import Node.Process (lookupEnv)
+import NodeMailer (TransportConfig, Message, createTransporter, sendMail)
 
 
-main :: forall e. Eff (nodemailer :: NODEMAILER, process :: PROCESS | e) Unit
+main :: Effect Unit
 main = do
   t <- config >>= createTransporter
   msg <- message
@@ -18,7 +18,7 @@ main = do
 
 
 
-config :: forall e. Eff (process :: PROCESS | e) TransportConfig
+config :: Effect TransportConfig
 config = do
   host <- getHost
   user <- getUser
@@ -31,7 +31,7 @@ config = do
 
 
 
-message :: forall e. Eff (process :: PROCESS | e) Message
+message :: Effect Message
 message = do
   to <- getTo
   pure { from: "noreply@example.com"

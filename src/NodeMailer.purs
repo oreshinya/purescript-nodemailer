@@ -1,6 +1,5 @@
 module NodeMailer
-  ( NODEMAILER
-  , AuthConfig
+  ( AuthConfig
   , TransportConfig
   , Message
   , Transporter
@@ -10,9 +9,9 @@ module NodeMailer
 
 import Prelude
 
-import Control.Monad.Aff (Aff)
-import Control.Monad.Aff.Compat (EffFnAff, fromEffFnAff)
-import Control.Monad.Eff (Eff, kind Effect)
+import Effect (Effect)
+import Effect.Aff (Aff)
+import Effect.Aff.Compat (EffectFnAff, fromEffectFnAff)
 import Data.Function.Uncurried (Fn2, runFn2)
 
 
@@ -38,17 +37,15 @@ type Message =
 
 foreign import data Transporter :: Type
 
-foreign import data NODEMAILER :: Effect
+
+
+sendMail :: Message -> Transporter -> Aff Unit
+sendMail message transporter = fromEffectFnAff $ runFn2 _sendMail message transporter
 
 
 
-sendMail :: forall e. Message -> Transporter -> Aff (nodemailer :: NODEMAILER | e) Unit
-sendMail message transporter = fromEffFnAff $ runFn2 _sendMail message transporter
+foreign import createTransporter :: TransportConfig -> Effect Transporter
 
 
 
-foreign import createTransporter :: forall e. TransportConfig -> Eff (nodemailer :: NODEMAILER | e)  Transporter
-
-
-
-foreign import _sendMail :: forall e. Fn2 Message Transporter (EffFnAff (nodemailer :: NODEMAILER | e) Unit)
+foreign import _sendMail :: Fn2 Message Transporter (EffectFnAff Unit)
