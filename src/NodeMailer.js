@@ -9,8 +9,12 @@ exports.createTransporter = function(config) {
 }
 
 exports._sendMail = function(message, transporter) {
+  var msg = Object.assign({}, message);
+  if (msg.attachments) {
+    msg.attachments = msg.attachments.map(function (x) { return x.value0 });
+  };
   return function(onError, onSuccess) {
-    transporter.sendMail(message, function(e) {
+    transporter.sendMail(msg, function(e) {
       if (e) {
         onError(e);
       } else {

@@ -2,6 +2,7 @@ module NodeMailer
   ( AuthConfig
   , TransportConfig
   , Message
+  , Attachment(..)
   , Transporter
   , createTransporter
   , sendMail
@@ -9,7 +10,6 @@ module NodeMailer
 
 import Prelude
 
-import Attachments (Attachment)
 import Data.Function.Uncurried (Fn2, runFn2)
 import Effect (Effect)
 import Effect.Aff (Aff)
@@ -38,6 +38,11 @@ type Message =
   , text :: String
   , attachments :: Array Attachment
   }
+
+-- This supports only a small subset of NodeMailer attachment properties
+data Attachment 
+  = AttachContent { filename :: String, content :: String }
+  | AttachPath { path :: String }
 
 foreign import data Transporter :: Type
 
