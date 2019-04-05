@@ -9,10 +9,11 @@ module NodeMailer
 
 import Prelude
 
+import Attachments (Attachment)
+import Data.Function.Uncurried (Fn2, runFn2)
 import Effect (Effect)
 import Effect.Aff (Aff)
 import Effect.Aff.Compat (EffectFnAff, fromEffectFnAff)
-import Data.Function.Uncurried (Fn2, runFn2)
 
 
 
@@ -31,8 +32,11 @@ type TransportConfig =
 type Message =
   { from :: String
   , to :: Array String
+  , cc :: Array String
+  , bcc :: Array String
   , subject :: String
   , text :: String
+  , attachments :: Array Attachment
   }
 
 foreign import data Transporter :: Type

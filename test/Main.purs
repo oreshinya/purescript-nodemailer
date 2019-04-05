@@ -36,8 +36,11 @@ message = do
   to <- getTo
   pure { from: "noreply@example.com"
   , to: [ to ]
+  , cc: [ ]
+  , bcc: [ ]
   , subject: "Test Subject"
   , text: "Go to https://github.com"
+  , attachments: [ ]
   }
   where
     getTo = fromMaybe "" <$> lookupEnv "TEST_TO"
