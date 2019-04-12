@@ -55,6 +55,14 @@ sendMail message transporter =
 
 foreign import createTransporter :: TransportConfig -> Effect Transporter
 
+type UnsafeAttachment = 
+  { filename :: Nullable String
+  , content :: Nullable String
+  , path :: Nullable String
+  }
+
+type UnsafeMessage = MessageBase UnsafeAttachment
+
 convert :: Attachment -> UnsafeAttachment
 convert = case _ of
   AttachContent { filename, content } ->
@@ -67,13 +75,5 @@ convert = case _ of
     , content: null
     , path: notNull path
     }
-
-type UnsafeAttachment = 
-  { filename :: Nullable String
-  , content :: Nullable String
-  , path :: Nullable String
-  }
-
-type UnsafeMessage = MessageBase UnsafeAttachment
 
 foreign import _sendMail :: Fn2 UnsafeMessage Transporter (EffectFnAff Unit)
