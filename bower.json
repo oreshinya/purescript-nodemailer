@@ -25,7 +25,8 @@
     "output"
   ],
   "dependencies": {
-    "purescript-aff": "^5.0.0"
+    "purescript-aff": "^5.0.0",
+    "purescript-foreign-generic": "8.0.0"
   },
   "devDependencies": {
     "purescript-node-process": "^6.0.0",
