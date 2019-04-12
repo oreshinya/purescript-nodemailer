@@ -26,7 +26,7 @@
   ],
   "dependencies": {
     "purescript-aff": "^5.0.0",
-    "purescript-foreign-generic": "8.0.0"
+    "purescript-nullable": "^4.1.1"
   },
   "devDependencies": {
     "purescript-node-process": "^6.0.0",
