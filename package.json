@@ -11,11 +11,11 @@
     "pulp:publish": "pulp publish"
   },
   "devDependencies": {
-    "bower": "^1.8.4",
-    "pulp": "^12.3.0",
-    "purescript": "^0.12.1"
+    "bower": "^1.8.8",
+    "pulp": "^12.4.0",
+    "purescript": "^0.12.4"
   },
   "dependencies": {
-    "nodemailer": "^4.7.0"
+    "nodemailer": "^6.1.0"
   }
 }
