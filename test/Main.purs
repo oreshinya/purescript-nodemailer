@@ -7,7 +7,9 @@ import Effect.Aff (launchAff_)
 import Effect.Class (liftEffect)
 import Effect.Console (log)
 import Node.FS.Stream (createReadStream)
-import NodeMailer (Attachment(..), Message, createTestAccount, createTransporter, fromReadable, getTestMessageUrl, sendMail_)
+import NodeMailer (Message, createTestAccount, createTransporter, getTestMessageUrl, sendMail_)
+import NodeMailer.Attachment (Attachment(..))
+import NodeMailer.AttachmentStream (fromReadable)
 
 main :: Effect Unit
 main = launchAff_ do
