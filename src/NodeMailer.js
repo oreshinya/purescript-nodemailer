@@ -10,15 +10,33 @@ exports.createTransporter = function(config) {
 
 exports._sendMail = function(message, transporter) {
   return function(onError, onSuccess) {
-    transporter.sendMail(message, function(e) {
+    transporter.sendMail(message, function(e, info) {
       if (e) {
         onError(e);
       } else {
-        onSuccess({});
+        onSuccess(info);
       }
     });
     return function(cancelError, onCancelerError, onCancelerSuccess) {
       onCancelerSuccess({});
     }
   }
+}
+
+exports._createTestAccount = function(onError, onSuccess) {
+  nodemailer.createTestAccount(function(e, account) {
+    if (e) {
+      onError(e);
+    } else {
+      onSuccess(account);
+    }
+  });
+  return function(cancelError, onCancelerError, onCancelerSuccess) {
+    onCancelerSuccess({});
+  }
+}
+
+exports._getTestMessageUrl = function(nothing, just, info) {
+  const result = nodemailer.getTestMessageUrl(info);
+  return !result ? nothing : just(result);
 }
