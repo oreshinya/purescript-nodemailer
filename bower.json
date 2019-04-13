@@ -25,9 +25,12 @@
     "output"
   ],
   "dependencies": {
-    "purescript-aff": "^5.0.0"
+    "purescript-aff": "^5.0.0",
+    "purescript-simple-json": "^5.0.0",
+    "purescript-node-streams": "^4.0.0"
   },
   "devDependencies": {
-    "purescript-node-process": "^6.0.0"
+    "purescript-console": "^4.2.0",
+    "purescript-node-fs": "^5.0.0"
   }
 }
