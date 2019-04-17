@@ -6,9 +6,22 @@ Bindings [nodemailer](https://github.com/nodemailer/nodemailer) for PureScript.
 
 ## Installation
 
+### Prerequisite
+
 ```
-npm install nodemailer
-bower install purescript-nodemailer
+$ npm install nodemailer
+```
+
+### Bower
+
+```
+$ bower install purescript-nodemailer
+```
+
+### Spago
+
+```
+$ spago install nodemailer
 ```
 
 ## Documentation
