@@ -3,19 +3,20 @@
   "name": "purescript-nodemailer",
   "scripts": {
     "postinstall": "bower install",
+    "bower": "bower",
     "clean": "rm -rf output",
-    "pulp:build": "pulp build",
-    "pulp:test": "pulp test",
-    "pulp:login": "pulp login",
+    "build": "pulp build",
+    "test": "pulp test",
     "pulp:version": "pulp version",
-    "pulp:publish": "pulp publish"
+    "pulp:publish": "pulp publish",
+    "pulp:login": "pulp login"
   },
   "devDependencies": {
     "bower": "^1.8.8",
-    "pulp": "^12.4.0",
-    "purescript": "^0.12.4"
+    "pulp": "^13.0.0",
+    "purescript": "^0.13.0"
   },
   "dependencies": {
-    "nodemailer": "^6.1.0"
+    "nodemailer": "^6.2.1"
   }
 }
