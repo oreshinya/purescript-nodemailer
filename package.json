@@ -11,12 +11,10 @@
     "pulp:publish": "pulp publish",
     "pulp:login": "pulp login"
   },
-  "devDependencies": {
+  "dependencies": {
     "bower": "^1.8.8",
     "pulp": "^13.0.0",
-    "purs-bin-simple": "^0.3.0"
-  },
-  "dependencies": {
-    "nodemailer": "^6.2.1"
+    "nodemailer": "^6.3.0",
+    "purescript": "^0.13.3"
   }
 }
