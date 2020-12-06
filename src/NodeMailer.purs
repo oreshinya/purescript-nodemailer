@@ -54,11 +54,11 @@ foreign import data Transporter :: Type
 
 foreign import data MessageInfo :: Type
 
-sendMail :: Message -> Transporter -> Aff Unit
-sendMail message transporter = void $ sendMail_ message transporter
+sendMail_ :: Message -> Transporter -> Aff Unit
+sendMail_ message transporter = void $ sendMail message transporter
 
-sendMail_ :: Message -> Transporter -> Aff MessageInfo
-sendMail_ message transporter = fromEffectFnAff $ runFn2 _sendMail (write message) transporter
+sendMail :: Message -> Transporter -> Aff MessageInfo
+sendMail message transporter = fromEffectFnAff $ runFn2 _sendMail (write message) transporter
 
 createTestAccount :: Aff TransportConfig
 createTestAccount = do
