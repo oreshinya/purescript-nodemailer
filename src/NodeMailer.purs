@@ -18,9 +18,8 @@ import Data.Maybe (Maybe(..))
 import Effect (Effect)
 import Effect.Aff (Aff)
 import Effect.Aff.Compat (EffectFnAff, fromEffectFnAff)
-import Foreign (Foreign)
+import Foreign (Foreign, unsafeToForeign)
 import NodeMailer.Attachment (Attachment)
-import Simple.JSON (write)
 
 type AuthConfig =
   { user :: String
@@ -54,11 +53,11 @@ foreign import data Transporter :: Type
 
 foreign import data MessageInfo :: Type
 
-sendMail_ :: Message -> Transporter -> Aff Unit
-sendMail_ message transporter = void $ sendMail message transporter
+sendMail_ :: Transporter -> Message -> Aff Unit
+sendMail_ transporter message = void $ sendMail transporter message
 
-sendMail :: Message -> Transporter -> Aff MessageInfo
-sendMail message transporter = fromEffectFnAff $ runFn2 _sendMail (write message) transporter
+sendMail :: Transporter -> Message -> Aff MessageInfo
+sendMail transporter message = fromEffectFnAff $ runFn2 _sendMail transporter (unsafeToForeign message)
 
 createTestAccount :: Aff TransportConfig
 createTestAccount = do
@@ -75,9 +74,10 @@ getTestMessageUrl = runFn3 _getTestMessageUrl Nothing Just
 
 foreign import createTransporter :: TransportConfig -> Effect Transporter
 
-foreign import _sendMail :: Fn2 Foreign Transporter (EffectFnAff MessageInfo)
+foreign import _sendMail :: Fn2 Transporter Foreign (EffectFnAff MessageInfo)
 
 foreign import _createTestAccount :: EffectFnAff TestAccount
 
 foreign import _getTestMessageUrl
   :: Fn3 (Maybe String) (String -> Maybe String) MessageInfo (Maybe String)
+

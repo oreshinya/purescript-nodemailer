@@ -8,7 +8,7 @@ exports.createTransporter = function(config) {
   }
 }
 
-exports._sendMail = function(message, transporter) {
+exports._sendMail = function(transporter, message) {
   return function(onError, onSuccess) {
     transporter.sendMail(message, function(e, info) {
       if (e) {
