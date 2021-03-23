@@ -2,13 +2,11 @@
 
 const nodemailer = require('nodemailer');
 
-exports.createTransporter = function(config) {
-  return function() {
-    return nodemailer.createTransport(config);
-  }
+exports.createTransporterImpl = function(config) {
+  return nodemailer.createTransport(config);
 }
 
-exports._sendMail = function(message, transporter) {
+exports.sendMailImpl = function(message, transporter) {
   return function(onError, onSuccess) {
     transporter.sendMail(message, function(e, info) {
       if (e) {
@@ -23,7 +21,7 @@ exports._sendMail = function(message, transporter) {
   }
 }
 
-exports._createTestAccount = function(onError, onSuccess) {
+exports.createTestAccountImpl = function(onError, onSuccess) {
   nodemailer.createTestAccount(function(e, account) {
     if (e) {
       onError(e);
@@ -36,7 +34,7 @@ exports._createTestAccount = function(onError, onSuccess) {
   }
 }
 
-exports._getTestMessageUrl = function(nothing, just, info) {
+exports.getTestMessageUrlImpl = function(nothing, just, info) {
   const result = nodemailer.getTestMessageUrl(info);
   return !result ? nothing : just(result);
 }

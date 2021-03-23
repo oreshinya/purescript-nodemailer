@@ -18,6 +18,7 @@ import Data.Maybe (Maybe(..))
 import Effect (Effect)
 import Effect.Aff (Aff)
 import Effect.Aff.Compat (EffectFnAff, fromEffectFnAff)
+import Effect.Uncurried (EffectFn1, runEffectFn1)
 import Foreign (Foreign)
 import NodeMailer.Attachment (Attachment)
 import Simple.JSON (write)
@@ -54,15 +55,18 @@ foreign import data Transporter :: Type
 
 foreign import data MessageInfo :: Type
 
+createTransporter :: TransportConfig -> Effect Transporter
+createTransporter config = runEffectFn1 createTransporterImpl config
+
 sendMail :: Message -> Transporter -> Aff Unit
 sendMail message transporter = void $ sendMail_ message transporter
 
 sendMail_ :: Message -> Transporter -> Aff MessageInfo
-sendMail_ message transporter = fromEffectFnAff $ runFn2 _sendMail (write message) transporter
+sendMail_ message transporter = fromEffectFnAff $ runFn2 sendMailImpl (write message) transporter
 
 createTestAccount :: Aff TransportConfig
 createTestAccount = do
-  account <- fromEffectFnAff _createTestAccount
+  account <- fromEffectFnAff createTestAccountImpl
   pure
     { host: account.smtp.host
     , port: account.smtp.port
@@ -71,13 +75,13 @@ createTestAccount = do
     }
 
 getTestMessageUrl :: MessageInfo -> Maybe String
-getTestMessageUrl = runFn3 _getTestMessageUrl Nothing Just
+getTestMessageUrl = runFn3 getTestMessageUrlImpl Nothing Just
 
-foreign import createTransporter :: TransportConfig -> Effect Transporter
+foreign import createTransporterImpl :: EffectFn1 TransportConfig Transporter
 
-foreign import _sendMail :: Fn2 Foreign Transporter (EffectFnAff MessageInfo)
+foreign import sendMailImpl :: Fn2 Foreign Transporter (EffectFnAff MessageInfo)
 
-foreign import _createTestAccount :: EffectFnAff TestAccount
+foreign import createTestAccountImpl :: EffectFnAff TestAccount
 
-foreign import _getTestMessageUrl
+foreign import getTestMessageUrlImpl
   :: Fn3 (Maybe String) (String -> Maybe String) MessageInfo (Maybe String)
