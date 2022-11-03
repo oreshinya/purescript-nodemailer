@@ -1,12 +1,12 @@
 'use strict';
 
-const nodemailer = require('nodemailer');
+import nodemailer from "nodemailer";
 
-exports.createTransporterImpl = function(config) {
+export function createTransporterImpl(config) {
   return nodemailer.createTransport(config);
 }
 
-exports.sendMailImpl = function(message, transporter) {
+export function sendMailImpl(message, transporter) {
   return function(onError, onSuccess) {
     transporter.sendMail(message, function(e, info) {
       if (e) {
@@ -21,7 +21,7 @@ exports.sendMailImpl = function(message, transporter) {
   }
 }
 
-exports.createTestAccountImpl = function(onError, onSuccess) {
+export function createTestAccountImpl(onError, onSuccess) {
   nodemailer.createTestAccount(function(e, account) {
     if (e) {
       onError(e);
@@ -34,7 +34,7 @@ exports.createTestAccountImpl = function(onError, onSuccess) {
   }
 }
 
-exports.getTestMessageUrlImpl = function(nothing, just, info) {
+export function getTestMessageUrlImpl(nothing, just, info) {
   const result = nodemailer.getTestMessageUrl(info);
   return !result ? nothing : just(result);
 }
