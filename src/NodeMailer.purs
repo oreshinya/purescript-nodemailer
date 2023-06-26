@@ -15,6 +15,7 @@ import Prelude
 
 import Data.Function.Uncurried (Fn2, Fn3, runFn2, runFn3)
 import Data.Maybe (Maybe(..))
+import Data.Nullable (Nullable, toNullable)
 import Effect (Effect)
 import Effect.Aff (Aff)
 import Effect.Aff.Compat (EffectFnAff, fromEffectFnAff)
@@ -34,7 +35,7 @@ type TransportConfig =
   , port :: Int
   , secure :: Boolean
   , auth :: AuthConfig
-  , dkim :: Maybe DKIM.Options
+  , dkim :: Nullable DKIM.Options
   }
 
 type TestAccount =
@@ -74,7 +75,7 @@ createTestAccount = do
     , port: account.smtp.port
     , secure: account.smtp.secure
     , auth: { user: account.user, pass: account.pass }
-    , dkim: Nothing
+    , dkim: toNullable Nothing
     }
 
 getTestMessageUrl :: MessageInfo -> Maybe String
