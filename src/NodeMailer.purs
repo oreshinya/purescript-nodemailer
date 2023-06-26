@@ -21,6 +21,7 @@ import Effect.Aff.Compat (EffectFnAff, fromEffectFnAff)
 import Effect.Uncurried (EffectFn1, runEffectFn1)
 import Foreign (Foreign)
 import NodeMailer.Attachment (Attachment)
+import NodeMailer.DKIM as DKIM
 import Simple.JSON (write)
 
 type AuthConfig =
@@ -33,6 +34,7 @@ type TransportConfig =
   , port :: Int
   , secure :: Boolean
   , auth :: AuthConfig
+  , dkim :: Maybe DKIM.Options
   }
 
 type TestAccount =
@@ -72,6 +74,7 @@ createTestAccount = do
     , port: account.smtp.port
     , secure: account.smtp.secure
     , auth: { user: account.user, pass: account.pass }
+    , dkim: Nothing
     }
 
 getTestMessageUrl :: MessageInfo -> Maybe String
