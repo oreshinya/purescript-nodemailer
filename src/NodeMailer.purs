@@ -51,6 +51,7 @@ type Message =
   , bcc :: Array String
   , subject :: String
   , text :: String
+  , html :: String
   , attachments :: Array Attachment
   }
 
