@@ -15,12 +15,14 @@ import Prelude
 
 import Data.Function.Uncurried (Fn2, Fn3, runFn2, runFn3)
 import Data.Maybe (Maybe(..))
+import Data.Nullable (Nullable, toNullable)
 import Effect (Effect)
 import Effect.Aff (Aff)
 import Effect.Aff.Compat (EffectFnAff, fromEffectFnAff)
 import Effect.Uncurried (EffectFn1, runEffectFn1)
 import Foreign (Foreign)
 import NodeMailer.Attachment (Attachment)
+import NodeMailer.DKIM as DKIM
 import Simple.JSON (write)
 
 type AuthConfig =
@@ -33,6 +35,7 @@ type TransportConfig =
   , port :: Int
   , secure :: Boolean
   , auth :: AuthConfig
+  , dkim :: Maybe DKIM.Options
   }
 
 type TestAccount =
@@ -48,6 +51,7 @@ type Message =
   , bcc :: Array String
   , subject :: String
   , text :: String
+  , html :: String
   , attachments :: Array Attachment
   }
 
@@ -56,7 +60,7 @@ foreign import data Transporter :: Type
 foreign import data MessageInfo :: Type
 
 createTransporter :: TransportConfig -> Effect Transporter
-createTransporter config = runEffectFn1 createTransporterImpl config
+createTransporter config = runEffectFn1 createTransporterImpl (fromTransportConfig config)
 
 sendMail :: Message -> Transporter -> Aff Unit
 sendMail message transporter = void $ sendMail_ message transporter
@@ -72,12 +76,32 @@ createTestAccount = do
     , port: account.smtp.port
     , secure: account.smtp.secure
     , auth: { user: account.user, pass: account.pass }
+    , dkim: Nothing
     }
 
 getTestMessageUrl :: MessageInfo -> Maybe String
 getTestMessageUrl = runFn3 getTestMessageUrlImpl Nothing Just
 
-foreign import createTransporterImpl :: EffectFn1 TransportConfig Transporter
+-- Implementation
+
+type TransportConfigImpl =
+  { host :: String
+  , port :: Int
+  , secure :: Boolean
+  , auth :: AuthConfig
+  , dkim :: Nullable DKIM.Options
+  }
+
+fromTransportConfig :: TransportConfig -> TransportConfigImpl
+fromTransportConfig config =
+  { host: config.host
+  , port: config.port
+  , secure: config.secure
+  , auth: config.auth
+  , dkim: toNullable config.dkim
+  }
+
+foreign import createTransporterImpl :: EffectFn1 TransportConfigImpl Transporter
 
 foreign import sendMailImpl :: Fn2 Foreign Transporter (EffectFnAff MessageInfo)
 
